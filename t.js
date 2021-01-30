@@ -27,4 +27,5 @@ function makeTree(node, str) {
     }
 }
 
-console.log(JSON.stringify(makeTree(parser.parse(s).topNode, s), undefined, '  '))
+const topNode = parser.parse(s).topNode
+console.log(JSON.stringify(makeTree(topNode, s), undefined, '  '))

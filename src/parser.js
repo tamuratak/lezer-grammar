@@ -2,14 +2,14 @@
 const {Parser} = require("lezer")
 exports.parser = Parser.deserialize({
   version: 12,
-  states: "$UOVQPOOOhQPO'#ClOpQPO'#C^QOQO'#Cl'#ClOuQPO'#ClQOQPOOO}QPO,58yO!YQPO'#C_OOQO,58x,58xO!_QPO'#CgOOQO'#Cg'#CgOuQPO'#CgO!mQPO,59WOOQO1G.e1G.eO!rQPO1G.eO!zQPO,59ROOQO1G.r1G.rOuQPO'#C`O#PQPO7+$POOQO7+$P7+$POOQO1G.m1G.mOOQO,58z,58zOOQO-E6^-E6^OOQO<<Gk<<Gk",
-  stateData: "#X~OVOS~OWQOXPO[SOaRObRO~OYUOT`X~OXVO~OXXO[ZO~OXXO[ZO_]O~OYUO~OYUO]ZX^ZX_ZX~O]`O~O^aO_cO~O]dO~O^aO_gO~O",
-  goto: "!TaPPbeqPPPPPPwPPPPbRTOQROQWQXYSUZaQb^RfbQ[SQ^UQ_ZRea",
-  nodeNames: "⚠ Grammar Top DefExpression",
-  maxTerm: 18,
+  states: "$zOVQPOOOOQO'#C`'#C`O_QPO'#C_OYQPO'#C^QOQPOOOdQPO,58yOOQO,58x,58xOOQO'#Ca'#CaOOQO'#Cb'#CbOxQPO'#CoOOQO'#Co'#CoOdQPO'#CoO!pQPO'#CdO#RQPO'#CgOOQO'#Cv'#CvOOQO'#Cg'#CgO#vQPO1G.eO$QQPO1G.eO$VQPO,59ZO$[QPO,59ZOOQO,59O,59OOOQO,59P,59POOQO,59Q,59QO$fQPO,58}OOQO-E6e-E6eOdQPO'#ChOOQO7+$P7+$POOQO1G.u1G.uOOQO-E6f-E6fO$qQPO,59S",
+  stateData: "%O~O_OS~O`ROaPO~ObTO~OaPOdVOeVOfWOgZOk[O~ObTOacXdcXecXfcXgcXicXkcXlcXmcXncXhcX~OaPOdVOeVOfWOgZO~OleOmfOaZXdZXeZXfZXgZXiZXkZXnZXhZX~OiiOnjO~PdOnjO~OhkO~OhkOiiO~PdOiiOnVahVa~Oi[an[ah[a~PdO",
+  goto: "#ekPPlo!Ouu!]!c!c!c!k!yPPPPPP#QPPPPPP#]RSOQSOQUR_YTZ[`cimSQOR_XTZ[`cimQaTRbZ]^TZ`cimQ`TQcZUh`cmRmiSg`cRlg[]TZ`cimRd[]_TZ`cim",
+  nodeNames: "⚠ Grammar Top DefExpression Identifier LiteralString LiteralRegexp ChoiceOp NegateOp PlusOp AstOp",
+  maxTerm: 30,
   skippedNodes: [0],
-  repeatNodeCount: 1,
-  tokenData: "$W~R_XY!QYZ!Q]^!Qpq!Qrs!Vwx!exy!syz!x!b!c!}!c!}#f#R#S#f#T#o#f#o#p#w#p#q#|#q#r$R~!VOV~~!YQrs!`!O!P!V~!eOa~~!hQwx!n!O!P!e~!sOb~~!xO[~~!}O]~~#QP#h#i#T~#WP#c#d#Z~#^P#d#e#a~#fOW~~#kSX~!Q![#f!c!}#f#R#S#f#T#o#f~#|OY~~$RO^~~$WO_~",
+  repeatNodeCount: 2,
+  tokenData: "-^~RcXY!^YZ!^]^!^pq!^qr!crs&Otu'Vwx*kxy+oyz+tz{+y{|,O!b!c,T!c!},l#R#S,l#T#o,l#o#p,}#p#q-S#q#r-X~!cO_~~!hPk~!}#O!k~!nRp#O!w#O#P$v#Q~!w~!zSp#O!w#O#P#W#P#Q$q#Q~!w~#Zapr!wrs!ws#O!w#O#P#W#P#Q$`#Q#U!w#U#V!w#V#Y!w#Y#Z!w#Z#b!w#b#c!w#c#f!w#f#g!w#g#h!w#h#i!w#i#j!w#j~!w~$eSf~p#O!w#O#P#W#P#Q$q#Q~!w~$vOf~~$yapr!wrs!ws#O!w#O#P#W#P#Q$`#Q#U!w#U#V!w#V#Y!w#Y#Z!w#Z#b!w#b#c!w#c#f!w#f#g!w#g#h!w#h#i!w#i#j!w#j~!w~&RUpq&Oqr&Ors&es#O&O#O#P&j#P~&O~&jOd~~&mWrs&O#O#P&O#U#V&O#Y#Z&O#b#c&O#f#g&O#h#i&O#i#j&O~'YP!}#O']~'`Rp#O'i#O#P)c#Q~'i~'lSp#O'i#O#P'x#P#Q$q#Q~'i~'{apr'irs'is#O'i#O#P'x#P#Q)Q#Q#U'i#U#V'i#V#Y'i#Y#Z'i#Z#b'i#b#c'i#c#f'i#f#g'i#g#h'i#h#i'i#i#j'i#j~'i~)VSf~p#O'i#O#P'x#P#Q$q#Q~'i~)fapr'irs'is#O'i#O#P'x#P#Q)Q#Q#U'i#U#V'i#V#Y'i#Y#Z'i#Z#b'i#b#c'i#c#f'i#f#g'i#g#h'i#h#i'i#i#j'i#j~'i~*nTpw*kwx*}x#O*k#O#P+S#P~*k~+SOe~~+VWrs*k#O#P*k#U#V*k#Y#Z*k#b#c*k#f#g*k#h#i*k#i#j*k~+tOg~~+yOh~~,OOm~~,TOl~~,WP#h#i,Z~,^P#c#d,a~,dP#d#e,g~,lO`~~,qSa~!Q![,l!c!},l#R#S,l#T#o,l~-SOb~~-XOi~~-^On~",
   tokenizers: [0],
   topRules: {"Grammar":[0,1]},
   tokenPrec: 0

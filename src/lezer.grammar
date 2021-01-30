@@ -1,5 +1,5 @@
 @top Grammar { 
-  Top | DefExpression | element
+  Top | DefExpression
 }
 
 Top {
@@ -7,15 +7,48 @@ Top {
 }
 
 DefExpression { 
-  identifier "{" (definition? | definition ( "|" definition )+)  "}"
+  Identifier "{" definition "}" |
+  Identifier "{" ChoiceOp "}"
+}
+
+ChoiceOp {
+  definition ( "|" definition )+
 }
 
 definition {
-  identifier | DefExpression | "(" definition ")"
+  (element | operator )+
+}
+
+NegateOp {
+  "!" element
+}
+
+PlusOp {
+  element "+"
+}
+
+AstOp {
+  element "*"
+}
+
+operator {
+  NegateOp | PlusOp | AstOp
 }
 
 element {
-  identifier | dq_string | sq_string | DefExpression | "(" definition ")"  
+  Identifier | LiteralString | LiteralRegexp | DefExpression | "(" definition ")" | "(" ChoiceOp ")"
+}
+
+Identifier {
+  identifier
+}
+
+LiteralString {
+  dq_string | sq_string
+}
+
+LiteralRegexp {
+  regexp
 }
 
 kw<term> { @specialize[@name={term}]<identifier, term> }
@@ -27,13 +60,15 @@ kw<term> { @specialize[@name={term}]<identifier, term> }
   atkeyword {
     "@" $[a-zA-Z_] $[a-zA-Z0-9_]*
   }
-  regexp { "[" reg "]" }
-  reg { ![\\\]] $[.] | }
+  regexp { "$[" reg_char+ "]" | "![" reg_char+ "]" }
+  reg_char { $[\u{20}-\u{5c}\u{5e}-\u{10ffff}] | "\\" esc | "\\]" }
   dq_string { '"' dq_char* '"' }
-  dq_char { ![\\"] $[.] | "\\" $[.] }
+  dq_char { $[\u{20}\u{21}\u{23}-\u{5b}\u{5d}-\u{10ffff}] | "\\" esc }
   sq_string { "'" sq_char* "'" }
-  sq_char { ![\\'] $[.] | "\\" $[.] }
+  sq_char { $[\u{20}-\u{26}\u{28}-\u{5b}\u{5d}-\u{10ffff}] | "\\" esc }
+  esc { $["\\bfnrtu] }
   whitespace { $[ \n\r\t] }
+  Op<expr> { expr }
 }
 
 @skip { whitespace }
