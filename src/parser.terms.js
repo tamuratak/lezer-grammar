@@ -10,9 +10,11 @@ module.exports = {
   PlusOp: 9,
   AstOp: 10,
   Skip: 11,
-  Precedence: 12,
-  PrecedenceItem: 13,
-  CutOp: 14,
-  LeftOp: 15,
-  RightOp: 16
+  MainSkip: 12,
+  ScopedSkip: 13,
+  Precedence: 14,
+  PrecedenceItem: 15,
+  CutOp: 16,
+  LeftOp: 17,
+  RightOp: 18
 }

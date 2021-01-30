@@ -7,10 +7,16 @@ Top {
 }
 
 Skip {
-  "@skip" "{" term? "}" |
-  "@skip" "{" ChoiceOp? "}" |
-  "@skip" "{" term? "}" "{" Rule* "}" |
-  "@skip" "{" ChoiceOp? "}" "{" Rule* "}"
+  "@skip" "{" MainSkip? "}" |
+  "@skip" "{" MainSkip? "}" "{" ScopedSkip "}" |
+}
+
+MainSkip {
+  ruleExpr
+}
+
+ScopedSkip {
+  Rule*
 }
 
 Precedence {
@@ -41,10 +47,10 @@ RightOp {
 }
 
 Rule { 
-  Identifier "{" ruleBlock "}"
+  Identifier "{" ruleExpr "}"
 }
 
-ruleBlock {
+ruleExpr {
   ChoiceOp | term
 }
 
@@ -73,7 +79,7 @@ operator {
 }
 
 element {
-  Identifier | LiteralString | LiteralRegexp | Rule | "(" ruleBlock ")"
+  Identifier | LiteralString | LiteralRegexp | Rule | "(" ruleExpr ")"
 }
 
 Identifier {
