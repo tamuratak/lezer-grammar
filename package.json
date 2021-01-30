@@ -1,0 +1,22 @@
+{
+  "name": "lezer-grammar",
+  "version": "0.1.0",
+  "description": "lezer-based Lezer grammar",
+  "license": "MIT",
+  "main": "t.js",
+  "devDependencies": {
+    "lezer-generator": "^0.12.0",
+    "mocha": "^8.1.3"
+  },
+  "dependencies": {
+    "commander": "^7.0.0",
+    "lezer": "^0.12.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tamuratak/lezer-grammar.git"
+  },
+  "scripts": {
+    "build": "lezer-generator src/lezer.grammar --cjs -o src/parser"
+  }
+}

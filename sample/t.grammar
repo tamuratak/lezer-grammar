@@ -1,0 +1,8 @@
+@top G { F }
+
+a { b }
+
+c { d }
+e { f { g } }
+
+"abc"

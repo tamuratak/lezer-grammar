@@ -1,0 +1,39 @@
+@top Grammar { 
+  Top | DefExpression | element
+}
+
+Top {
+  "@top" DefExpression
+}
+
+DefExpression { 
+  identifier "{" (definition? | definition ( "|" definition )+)  "}"
+}
+
+definition {
+  identifier | DefExpression | "(" definition ")"
+}
+
+element {
+  identifier | dq_string | sq_string | DefExpression | "(" definition ")"  
+}
+
+kw<term> { @specialize[@name={term}]<identifier, term> }
+
+@tokens {
+  identifier {
+    $[a-zA-Z_] $[a-zA-Z0-9_]*
+  }
+  atkeyword {
+    "@" $[a-zA-Z_] $[a-zA-Z0-9_]*
+  }
+  regexp { "[" reg "]" }
+  reg { ![\\\]] $[.] | }
+  dq_string { '"' dq_char* '"' }
+  dq_char { ![\\"] $[.] | "\\" $[.] }
+  sq_string { "'" sq_char* "'" }
+  sq_char { ![\\'] $[.] | "\\" $[.] }
+  whitespace { $[ \n\r\t] }
+}
+
+@skip { whitespace }
