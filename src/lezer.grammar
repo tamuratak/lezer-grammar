@@ -1,21 +1,58 @@
 @top Grammar { 
-  Top | DefExpression
+  Top | Rule | Skip | Precedence
 }
 
 Top {
-  "@top" DefExpression
+  "@top" Rule
 }
 
-DefExpression { 
-  Identifier "{" definition "}" |
-  Identifier "{" ChoiceOp "}"
+Skip {
+  "@skip" "{" term? "}" |
+  "@skip" "{" ChoiceOp? "}" |
+  "@skip" "{" term? "}" "{" Rule* "}" |
+  "@skip" "{" ChoiceOp? "}" "{" Rule* "}"
+}
+
+Precedence {
+  "@precedence" "{" PrecedenceItem ("," PrecedenceItem)* "}"
+}
+
+//Tokens {
+//  "@tokens" "{" 
+//}
+
+PrecedenceItem {
+  Identifier |
+  CutOp |
+  LeftOp |
+  RightOp
+}
+
+CutOp {
+  Identifier "@cut"
+}
+
+LeftOp {
+  Identifier "@left" 
+}
+
+RightOp {
+  Identifier "@right"
+}
+
+Rule { 
+  Identifier "{" ruleBlock "}"
+}
+
+ruleBlock {
+  ChoiceOp | term
 }
 
 ChoiceOp {
-  definition ( "|" definition )+
+  term ( "|" term )+
 }
 
-definition {
+term {
   (element | operator )+
 }
 
@@ -36,7 +73,7 @@ operator {
 }
 
 element {
-  Identifier | LiteralString | LiteralRegexp | DefExpression | "(" definition ")" | "(" ChoiceOp ")"
+  Identifier | LiteralString | LiteralRegexp | Rule | "(" ruleBlock ")"
 }
 
 Identifier {
@@ -55,9 +92,9 @@ kw<term> { @specialize[@name={term}]<identifier, term> }
 
 @tokens {
   identifier {
-    $[a-zA-Z_] $[a-zA-Z0-9_]*
+    $[a-zA-Z_] $[a-zA-Z0-9_.]*
   }
-  atkeyword {
+  at_keyword {
     "@" $[a-zA-Z_] $[a-zA-Z0-9_]*
   }
   regexp { "$[" reg_char+ "]" | "![" reg_char+ "]" }
