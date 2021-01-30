@@ -1,42 +1,109 @@
 @top Grammar { 
-  Top | DefExpression
+  Top | Rule | Skip | Precedence | Tokens | Comment
 }
 
 Top {
-  "@top" DefExpression
+  "@top" Rule
 }
 
-DefExpression { 
-  Identifier "{" definition "}" |
-  Identifier "{" ChoiceOp "}"
+Skip {
+  "@skip" "{" MainSkip? "}" |
+  "@skip" "{" MainSkip? "}" "{" ScopedSkip "}"
 }
 
-ChoiceOp {
-  definition ( "|" definition )+
+MainSkip {
+  ruleExpr
 }
 
-definition {
-  (element | operator )+
+ScopedSkip {
+  Rule*
 }
 
-NegateOp {
+Precedence {
+  "@precedence" "{" precedenceItem ("," precedenceItem)* "}"
+}
+
+precedenceItem {
+  PrecedenceItem |
+  PrecedenceItemCut |
+  PrecedenceItemLeft |
+  PrecedenceItemRight
+}
+
+PrecedenceItem {
+  Identifier
+}
+
+PrecedenceItemCut {
+  Identifier "@cut"
+}
+
+PrecedenceItemLeft {
+  Identifier "@left" 
+}
+
+PrecedenceItemRight {
+  Identifier "@right"
+}
+
+Tokens {
+  "@tokens" "{" tokenRule+ "}"
+}
+
+tokenRule {
+  Rule | TokenPrecedence | literalToken
+}
+
+literalToken {
+  LiteralString | LiteralRegexp
+}
+
+TokenPrecedence {
+  "@precedence" "{" tokenPrecedenceItem ("," tokenPrecedenceItem)* "}"
+}
+
+tokenPrecedenceItem {
+  LiteralString | LiteralString | Identifier
+}
+
+Rule { 
+  Identifier "{" ruleExpr "}"
+}
+
+ruleExpr {
+  ChoiceExpr | term | Rule
+}
+
+ChoiceExpr {
+  term ( "|" term )+
+}
+
+term {
+  ( element | operator )+
+}
+
+Negate {
   "!" element
 }
 
-PlusOp {
+RepeatPlus {
   element "+"
 }
 
-AstOp {
+RepeatAst {
   element "*"
 }
 
+RepeatOpt {
+  element "?"
+}
+
 operator {
-  NegateOp | PlusOp | AstOp
+  Negate | RepeatPlus | RepeatAst | RepeatOpt
 }
 
 element {
-  Identifier | LiteralString | LiteralRegexp | DefExpression | "(" definition ")" | "(" ChoiceOp ")"
+  Identifier | LiteralString | LiteralRegexp | "(" ruleExpr ")" | Any
 }
 
 Identifier {
@@ -51,13 +118,11 @@ LiteralRegexp {
   regexp
 }
 
-kw<term> { @specialize[@name={term}]<identifier, term> }
-
 @tokens {
   identifier {
-    $[a-zA-Z_] $[a-zA-Z0-9_]*
+    $[a-zA-Z] $[a-zA-Z0-9_.]*
   }
-  atkeyword {
+  at_keyword {
     "@" $[a-zA-Z_] $[a-zA-Z0-9_]*
   }
   regexp { "$[" reg_char+ "]" | "![" reg_char+ "]" }
@@ -68,7 +133,8 @@ kw<term> { @specialize[@name={term}]<identifier, term> }
   sq_char { $[\u{20}-\u{26}\u{28}-\u{5b}\u{5d}-\u{10ffff}] | "\\" esc }
   esc { $["\\bfnrtu] }
   whitespace { $[ \n\r\t] }
-  Op<expr> { expr }
+  Comment { "//" ![\n]* }
+  Any { "_" }
 }
 
 @skip { whitespace }
