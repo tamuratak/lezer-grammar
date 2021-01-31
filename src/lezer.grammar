@@ -1,5 +1,5 @@
 @top Grammar { 
-  Top | Rule | Skip | Precedence | Tokens
+  Top | Rule | Skip | Precedence | Tokens | Comment
 }
 
 Top {
@@ -47,7 +47,23 @@ PrecedenceItemRight {
 }
 
 Tokens {
-  "@tokens" "{" Rule "}"
+  "@tokens" "{" tokenRule+ "}"
+}
+
+tokenRule {
+  Rule | TokenPrecedence | literalToken
+}
+
+literalToken {
+  LiteralString | LiteralRegexp
+}
+
+TokenPrecedence {
+  "@precedence" "{" tokenPrecedenceItem ("," tokenPrecedenceItem)* "}"
+}
+
+tokenPrecedenceItem {
+  LiteralString | LiteralString | Identifier
 }
 
 Rule { 
@@ -55,10 +71,10 @@ Rule {
 }
 
 ruleExpr {
-  ChoiceOp | term | Rule
+  ChoiceExpr | term | Rule
 }
 
-ChoiceOp {
+ChoiceExpr {
   term ( "|" term )+
 }
 
@@ -66,20 +82,24 @@ term {
   ( element | operator )+
 }
 
-NegateOp {
+Negate {
   "!" element
 }
 
-PlusOp {
+RepeatPlus {
   element "+"
 }
 
-AstOp {
+RepeatAst {
   element "*"
 }
 
+RepeatOpt {
+  element "?"
+}
+
 operator {
-  NegateOp | PlusOp | AstOp
+  Negate | RepeatPlus | RepeatAst | RepeatOpt
 }
 
 element {
@@ -97,8 +117,6 @@ LiteralString {
 LiteralRegexp {
   regexp
 }
-
-kw<term> { @specialize[@name={term}]<identifier, term> }
 
 @tokens {
   identifier {
