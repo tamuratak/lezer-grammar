@@ -55,7 +55,7 @@ tokenRule {
 }
 
 literalToken {
-  LiteralString | LiteralRegexp
+  LiteralString NodeProp? | LiteralRegexp NodeProp?
 }
 
 TokenPrecedence {
@@ -67,11 +67,15 @@ tokenPrecedenceItem {
 }
 
 Rule { 
-  Identifier "{" ruleExpr "}"
+  Identifier NodeProp? TemplateArguments? "{" ruleExpr "}"
+}
+
+RuleSimple {
+  Identifier NodeProp? "{" ruleExpr "}"
 }
 
 ruleExpr {
-  ChoiceExpr | term | Rule
+  ChoiceExpr | term | RuleSimple
 }
 
 ChoiceExpr {
@@ -79,7 +83,7 @@ ChoiceExpr {
 }
 
 term {
-  ( element | operator )+
+  ( element | repeat )+
 }
 
 Negate {
@@ -98,12 +102,40 @@ RepeatOpt {
   element "?"
 }
 
-operator {
+repeat {
   Negate | RepeatPlus | RepeatAst | RepeatOpt
 }
 
 element {
-  Identifier | LiteralString | LiteralRegexp | "(" ruleExpr ")" | Any
+  Identifier | TemplateInstance | LiteralString | LiteralRegexp | "(" ruleExpr ")" | Any
+}
+
+TemplateInstance {
+  Identifier TemplateInstanceArguments
+}
+
+TemplateArguments {
+  "<" Identifier ("," Identifier)* ">"
+}
+
+TemplateInstanceArguments {
+  "<" templateInstanceArguments ("," templateInstanceArguments)* ">"
+}
+
+templateInstanceArguments {
+  term | ChoiceExpr
+}
+
+NodeProp {
+  "[" PropName "=" PropValue "]"
+}
+
+PropName {
+  identifier | at_keyword
+}
+
+PropValue {
+  "{" identifier "}" | propValue
 }
 
 Identifier {
@@ -119,6 +151,9 @@ LiteralRegexp {
 }
 
 @tokens {
+  propValue {
+    $[a-zA-Z0-9]+
+  }
   identifier {
     $[a-zA-Z] $[a-zA-Z0-9_.]*
   }
