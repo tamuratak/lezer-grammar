@@ -61,30 +61,15 @@ ScopedSkip {
 }
 
 Precedence {
-  "@precedence" "{" precedenceItem ("," precedenceItem)* "}"
-}
-
-precedenceItem {
-  PrecedenceItem |
-  PrecedenceItemCut |
-  PrecedenceItemLeft |
-  PrecedenceItemRight
+  "@precedence" "{" PrecedenceItem ("," PrecedenceItem)* "}"
 }
 
 PrecedenceItem {
-  Identifier
+  Identifier PrecedenceItemModifier?
 }
 
-PrecedenceItemCut {
-  Identifier "@cut"
-}
-
-PrecedenceItemLeft {
-  Identifier "@left" 
-}
-
-PrecedenceItemRight {
-  Identifier "@right"
+PrecedenceItemModifier {
+  "@cut" | "@left" | "@right"
 }
 
 Tokens {
@@ -92,11 +77,12 @@ Tokens {
 }
 
 tokenRule {
-  Rule | TokenPrecedence | literalToken
+  Rule | TokenPrecedence | LiteralToken
 }
 
-literalToken {
-  LiteralString NodeProp? | LiteralRegexp NodeProp?
+LiteralToken {
+  LiteralString NodeProp? |
+  LiteralRegexp NodeProp?
 }
 
 TokenPrecedence {
