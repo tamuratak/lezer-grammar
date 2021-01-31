@@ -1,9 +1,13 @@
 @top Grammar { 
-  Top | Rule | Skip | Precedence | Tokens | Comment
+  Top | Rule | Skip | Precedence | Tokens | Comment | DetectDelim
 }
 
 Top {
   "@top" Rule
+}
+
+DetectDelim {
+  "@detectDelim"
 }
 
 Skip {
@@ -16,7 +20,7 @@ MainSkip {
 }
 
 ScopedSkip {
-  Rule*
+  RuleSimple*
 }
 
 Precedence {
