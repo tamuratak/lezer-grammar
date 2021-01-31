@@ -1,5 +1,5 @@
 @top Grammar { 
-  Top | Rule | Skip | Precedence
+  Top | Rule | Skip | Precedence | Tokens
 }
 
 Top {
@@ -8,7 +8,7 @@ Top {
 
 Skip {
   "@skip" "{" MainSkip? "}" |
-  "@skip" "{" MainSkip? "}" "{" ScopedSkip "}" |
+  "@skip" "{" MainSkip? "}" "{" ScopedSkip "}"
 }
 
 MainSkip {
@@ -20,30 +20,34 @@ ScopedSkip {
 }
 
 Precedence {
-  "@precedence" "{" PrecedenceItem ("," PrecedenceItem)* "}"
+  "@precedence" "{" precedenceItem ("," precedenceItem)* "}"
 }
 
-//Tokens {
-//  "@tokens" "{" 
-//}
+precedenceItem {
+  PrecedenceItem |
+  PrecedenceItemCut |
+  PrecedenceItemLeft |
+  PrecedenceItemRight
+}
 
 PrecedenceItem {
-  Identifier |
-  CutOp |
-  LeftOp |
-  RightOp
+  Identifier
 }
 
-CutOp {
+PrecedenceItemCut {
   Identifier "@cut"
 }
 
-LeftOp {
+PrecedenceItemLeft {
   Identifier "@left" 
 }
 
-RightOp {
+PrecedenceItemRight {
   Identifier "@right"
+}
+
+Tokens {
+  "@tokens" "{" Rule "}"
 }
 
 Rule { 
@@ -51,7 +55,7 @@ Rule {
 }
 
 ruleExpr {
-  ChoiceOp | term
+  ChoiceOp | term | Rule
 }
 
 ChoiceOp {
@@ -59,7 +63,7 @@ ChoiceOp {
 }
 
 term {
-  (element | operator )+
+  ( element | operator )+
 }
 
 NegateOp {
@@ -79,7 +83,7 @@ operator {
 }
 
 element {
-  Identifier | LiteralString | LiteralRegexp | Rule | "(" ruleExpr ")"
+  Identifier | LiteralString | LiteralRegexp | "(" ruleExpr ")" | Any
 }
 
 Identifier {
@@ -98,7 +102,7 @@ kw<term> { @specialize[@name={term}]<identifier, term> }
 
 @tokens {
   identifier {
-    $[a-zA-Z_] $[a-zA-Z0-9_.]*
+    $[a-zA-Z] $[a-zA-Z0-9_.]*
   }
   at_keyword {
     "@" $[a-zA-Z_] $[a-zA-Z0-9_]*
@@ -111,7 +115,8 @@ kw<term> { @specialize[@name={term}]<identifier, term> }
   sq_char { $[\u{20}-\u{26}\u{28}-\u{5b}\u{5d}-\u{10ffff}] | "\\" esc }
   esc { $["\\bfnrtu] }
   whitespace { $[ \n\r\t] }
-  Op<expr> { expr }
+  Comment { "//" ![\n]* }
+  Any { "_" }
 }
 
 @skip { whitespace }
