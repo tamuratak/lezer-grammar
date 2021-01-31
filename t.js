@@ -1,5 +1,5 @@
 const fs = require('fs')
-const {parser} = require('./src/parser')
+let {parser} = require('./src/parser')
 const commander = require('commander')
 commander.parse(process.argv)
 const filename = commander.args[0]
@@ -9,6 +9,11 @@ if (!fs.existsSync(filename)) {
 }
 const s = fs.readFileSync(filename, {encoding: 'utf8'})
 function makeTree(node, str) {
+    if (node.type.isError) {
+        console.log(node)
+        console.log(str.substring(node.from-10, node.to+10))
+        throw('')
+    }
     let child = node.firstChild
     if (!child) {
         return {
@@ -27,5 +32,8 @@ function makeTree(node, str) {
     }
 }
 
+//parser = parser.configure({strict: true})
 const topNode = parser.parse(s).topNode
-console.log(JSON.stringify(makeTree(topNode, s), undefined, '  '))
+console.log(topNode.type.isSkipped)
+const ret = JSON.stringify(makeTree(topNode, s), undefined, '  ')
+//console.log(ret)

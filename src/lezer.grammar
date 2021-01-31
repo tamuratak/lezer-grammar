@@ -1,5 +1,5 @@
 @top Grammar { 
-  (Top | Rule | Skip | Precedence | Tokens | Comment | DetectDelim | external)+
+  (Top | Rule | Skip | Precedence | Tokens | Comment | DetectDelim | Dialects | external)+
 }
 
 Top {
@@ -90,7 +90,7 @@ TokenConflict {
 }
 
 tokenPrecedenceItem {
-  LiteralString | LiteralString | Identifier
+  LiteralString | LiteralString | Identifier | TemplateInstance
 }
 
 Rule { 
@@ -110,7 +110,7 @@ ChoiceExpr {
 }
 
 Sequence {
-  ( element | repeat | RuleSimple )+
+  ( element | repeat )+
 }
 
 Negate {
@@ -134,7 +134,7 @@ repeat {
 }
 
 element {
-  Identifier | TemplateInstance | LiteralString | LiteralRegexp | Specialize | Extend | "(" ruleExpr ")" | Any
+  Identifier | TemplateInstance | LiteralString | LiteralRegexp | Specialize | Extend | RuleSimple | "(" ruleExpr ")"
 }
 
 Specialize {
@@ -158,11 +158,11 @@ TemplateInstanceArguments {
 }
 
 templateInstanceArguments {
-  Sequence | ChoiceExpr
+  Sequence | ChoiceExpr | 
 }
 
 NodeProp {
-  "[" PropName "=" PropValue "]"
+  "[" PropName ("=" PropValue)? "]"
 }
 
 PropName {
@@ -170,7 +170,7 @@ PropName {
 }
 
 PropValue {
-  "{" identifier "}" | propValue
+  "{" identifier "}" | propValue | LiteralString
 }
 
 Identifier {
@@ -190,7 +190,7 @@ LiteralRegexp {
     $[a-zA-Z0-9]+
   }
   identifier {
-    $[a-zA-Z] $[a-zA-Z0-9_.]*
+    $[a-zA-Z_] $[a-zA-Z0-9_.]*
   }
   at_keyword {
     "@" $[a-zA-Z_] $[a-zA-Z0-9_]*
@@ -204,7 +204,7 @@ LiteralRegexp {
   esc { $["\\bfnrtu] }
   whitespace { $[ \n\r\t] }
   Comment { "//" ![\n]* }
-  Any { "_" }
+//  Any { "_" }
 }
 
 @skip { whitespace }
