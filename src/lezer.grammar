@@ -1,5 +1,5 @@
 @top Grammar { 
-  Top | Rule | Skip | Precedence | Tokens | Comment | DetectDelim
+  Top | Rule | Skip | Precedence | Tokens | Comment | DetectDelim | external
 }
 
 Top {
@@ -8,6 +8,43 @@ Top {
 
 DetectDelim {
   "@detectDelim"
+}
+
+Specialize {
+  "@specialize" NodeProp? TemplateInstanceArguments
+}
+
+Extend {
+  "@extend" NodeProp? TemplateInstanceArguments
+}
+
+external {
+  ExternalTokens | ExternalGrammar | ExternalProp | ExternalSpecialize | ExternalExtend
+}
+
+ExternalTokens {
+  "@external" "tokens" Identifier "from" LiteralString "{" ExternalToken ("," ExternalToken)* "}"
+}
+
+ExternalToken {
+  Identifier NodeProp?
+}
+
+ExternalGrammar {
+  "@external" "grammar" Identifier "from" LiteralString |
+  "@external" "grammar" Identifier "as" Identifier "from" LiteralString
+}
+
+ExternalProp {
+  "@external" "prop" Identifier "from" LiteralString
+}
+
+ExternalSpecialize {
+  "@external" "specialize" "{" Identifier "}" Identifier "from" LiteralString "{" ExternalToken ("," ExternalToken)* "}"
+}
+
+ExternalExtend {
+  "@external" "extend" "{" Identifier "}" Identifier "from" LiteralString "{" ExternalToken ("," ExternalToken)* "}"
 }
 
 Skip {
@@ -87,7 +124,7 @@ ChoiceExpr {
 }
 
 Sequence {
-  ( element | repeat | RuleSimple )+
+  ( element | repeat | RuleSimple | Specialize | Extend )+
 }
 
 Negate {
