@@ -1,5 +1,5 @@
 @top Grammar { 
-  Top | Rule | Skip | Precedence | Tokens | Comment | DetectDelim | external
+  (Top | Rule | Skip | Precedence | Tokens | Comment | DetectDelim | external)+
 }
 
 Top {
@@ -10,12 +10,8 @@ DetectDelim {
   "@detectDelim"
 }
 
-Specialize {
-  "@specialize" NodeProp? TemplateInstanceArguments
-}
-
-Extend {
-  "@extend" NodeProp? TemplateInstanceArguments
+Dialects {
+  "@dialects" "{" Identifier (","? Identifier)* "}"
 }
 
 external {
@@ -23,7 +19,7 @@ external {
 }
 
 ExternalTokens {
-  "@external" "tokens" Identifier "from" LiteralString "{" ExternalToken ("," ExternalToken)* "}"
+  "@external" "tokens" Identifier "from" LiteralString "{" ExternalToken (","? ExternalToken)* "}"
 }
 
 ExternalToken {
@@ -61,7 +57,7 @@ ScopedSkip {
 }
 
 Precedence {
-  "@precedence" "{" PrecedenceItem ("," PrecedenceItem)* "}"
+  "@precedence" "{" PrecedenceItem (","? PrecedenceItem)* "}"
 }
 
 PrecedenceItem {
@@ -86,7 +82,11 @@ LiteralToken {
 }
 
 TokenPrecedence {
-  "@precedence" "{" tokenPrecedenceItem ("," tokenPrecedenceItem)* "}"
+  "@precedence" "{" tokenPrecedenceItem (","? tokenPrecedenceItem)* "}"
+}
+
+TokenConflict {
+  "@conflict" "{" tokenPrecedenceItem (","? tokenPrecedenceItem)* "}"
 }
 
 tokenPrecedenceItem {
@@ -110,7 +110,7 @@ ChoiceExpr {
 }
 
 Sequence {
-  ( element | repeat | RuleSimple | Specialize | Extend )+
+  ( element | repeat | RuleSimple )+
 }
 
 Negate {
@@ -134,7 +134,15 @@ repeat {
 }
 
 element {
-  Identifier | TemplateInstance | LiteralString | LiteralRegexp | "(" ruleExpr ")" | Any
+  Identifier | TemplateInstance | LiteralString | LiteralRegexp | Specialize | Extend | "(" ruleExpr ")" | Any
+}
+
+Specialize {
+  "@specialize" NodeProp? TemplateInstanceArguments
+}
+
+Extend {
+  "@extend" NodeProp? TemplateInstanceArguments
 }
 
 TemplateInstance {
