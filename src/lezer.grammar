@@ -3,7 +3,7 @@
 }
 
 statement {
-  Top | Rule | Skip | Precedence | Tokens | Comment | DetectDelim | Dialects | external
+  Top | Rule | Skip | Precedence | Tokens | DetectDelim | Dialects | external
 }
 
 Top {
@@ -77,7 +77,7 @@ Tokens {
 }
 
 tokenRule {
-  Rule | TokenPrecedence | LiteralToken
+  Rule | TokenPrecedence | TokenConflict | LiteralToken
 }
 
 LiteralToken {
@@ -122,11 +122,11 @@ Sequence {
   AnonymousRule ( element | repeat )*
 }
 
-Negate {
-  "!" element
+PrecedenceMarker {
+  "!" Identifier
 }
 
-Ambiguity {
+AmbiguityMarker {
   "~" Identifier
 }
 
@@ -143,11 +143,11 @@ RepeatOpt {
 }
 
 repeat {
-  Negate | RepeatPlus | RepeatAst | RepeatOpt
+  AmbiguityMarker | PrecedenceMarker | RepeatPlus | RepeatAst | RepeatOpt
 }
 
 element {
-  Identifier | Ambiguity | TemplateInstance | LiteralString | LiteralRegexp | Specialize | Extend | RuleSimple | "(" ruleExpr ")"
+  Identifier | TemplateInstance | LiteralString | LiteralRegexp | Specialize | Extend | RuleSimple | "(" ruleExpr ")"
 }
 
 Specialize {
@@ -175,15 +175,23 @@ templateInstanceArguments {
 }
 
 NodeProp {
-  ("[" PropName ("=" PropValue+ )? "]")?
+  ("[" Prop ("," Prop)* "]")?
+}
+
+Prop {
+  PropName PropValueSeq
 }
 
 PropName {
   identifier | at_keyword
 }
 
+PropValueSeq {
+  ("=" ("{" Identifier "}" | PropValue | LiteralString)+ )?
+}
+
 PropValue {
-  "{" identifier "}" | propValue | LiteralString
+  propValue
 }
 
 Identifier {
@@ -216,8 +224,8 @@ LiteralRegexp {
   sq_char { $[\u{20}-\u{26}\u{28}-\u{5b}\u{5d}-\u{10ffff}] | "\\" esc }
   esc { $["\\bfnrtu] }
   whitespace { $[ \n\r\t] }
-  Comment { "//" ![\n]* }
-//  Any { "_" }
+  comment { "//" ![\r\n]* }
+  blockComment { "/*" (![*] | "*" ![/])* "*/" }
 }
 
-@skip { whitespace }
+@skip { whitespace | comment | blockComment }
