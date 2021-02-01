@@ -1,8 +1,6 @@
 const fs = require('fs')
 let {parser} = require('../dist/parser')
-const commander = require('commander')
-commander.parse(process.argv)
-const filename = commander.args[0]
+const filename = process.argv.pop()
 if (!fs.existsSync(filename)) {
     console.error(`${filename} not found.`)
     process.exit(1)
