@@ -27,7 +27,7 @@ ExternalTokens {
 }
 
 ExternalToken {
-  Identifier NodeProp?
+  Identifier NodeProp
 }
 
 ExternalGrammar {
@@ -48,12 +48,12 @@ ExternalExtend {
 }
 
 Skip {
-  "@skip" "{" MainSkip? "}" |
-  "@skip" "{" MainSkip? "}" "{" ScopedSkip "}"
+  "@skip" "{" MainSkip "}" |
+  "@skip" "{" MainSkip "}" "{" ScopedSkip "}"
 }
 
 MainSkip {
-  ruleExpr
+  ruleExpr?
 }
 
 ScopedSkip {
@@ -81,8 +81,8 @@ tokenRule {
 }
 
 LiteralToken {
-  LiteralString NodeProp? |
-  LiteralRegexp NodeProp?
+  LiteralString NodeProp |
+  LiteralRegexp NodeProp
 }
 
 TokenPrecedence {
@@ -98,11 +98,11 @@ tokenPrecedenceItem {
 }
 
 Rule { 
-  Identifier NodeProp? TemplateArguments? "{" ruleExpr "}"
+  Identifier NodeProp TemplateArguments "{" ruleExpr "}"
 }
 
 RuleSimple {
-  Identifier NodeProp? "{" ruleExpr "}"
+  Identifier NodeProp "{" ruleExpr "}"
 }
 
 AnonymousRule {
@@ -151,11 +151,11 @@ element {
 }
 
 Specialize {
-  "@specialize" NodeProp? TemplateInstanceArguments
+  "@specialize" NodeProp TemplateInstanceArguments
 }
 
 Extend {
-  "@extend" NodeProp? TemplateInstanceArguments
+  "@extend" NodeProp TemplateInstanceArguments
 }
 
 TemplateInstance {
@@ -163,7 +163,7 @@ TemplateInstance {
 }
 
 TemplateArguments {
-  "<" Identifier ("," Identifier)* ">"
+  ("<" Identifier ("," Identifier)* ">")?
 }
 
 TemplateInstanceArguments {
@@ -175,7 +175,7 @@ templateInstanceArguments {
 }
 
 NodeProp {
-  "[" PropName ("=" PropValue)? "]"
+  ("[" PropName ("=" PropValue+ )? "]")?
 }
 
 PropName {
