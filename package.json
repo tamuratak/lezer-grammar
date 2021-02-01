@@ -17,6 +17,6 @@
     "url": "https://github.com/tamuratak/lezer-grammar.git"
   },
   "scripts": {
-    "build": "lezer-generator src/lezer.grammar --cjs -o src/parser"
+    "build": "lezer-generator src/lezer.grammar --cjs -o dist/parser"
   }
 }
