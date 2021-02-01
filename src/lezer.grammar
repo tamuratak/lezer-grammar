@@ -1,5 +1,9 @@
 @top Grammar { 
-  (Top | Rule | Skip | Precedence | Tokens | Comment | DetectDelim | Dialects | external)+
+  statement+
+}
+
+statement {
+  Top | Rule | Skip | Precedence | Tokens | Comment | DetectDelim | Dialects | external
 }
 
 Top {
