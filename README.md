@@ -1,3 +1,5 @@
+A parser for Lezer grammar.
+
 Reference:
 
 - https://lezer.codemirror.net/docs/guide/
