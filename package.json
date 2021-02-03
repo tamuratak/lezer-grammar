@@ -1,9 +1,10 @@
 {
-  "name": "lezer-grammar",
+  "name": "@tamuratak/lezer-grammar",
   "version": "0.1.0",
-  "description": "lezer-based Lezer grammar",
+  "description": "A parser for Lezer grammar",
   "license": "MIT",
-  "main": "t.js",
+  "main": "dist/parser.js",
+  "types": "types/parser.d.ts",
   "devDependencies": {
     "lezer-generator": "^0.13.0"
   },
