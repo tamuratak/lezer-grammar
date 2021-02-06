@@ -1,4 +1,5 @@
 out/
+!out/types/src/parser.d.ts
 
 # Logs
 logs

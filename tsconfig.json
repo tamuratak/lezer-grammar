@@ -1,6 +1,8 @@
 {
     "compilerOptions": {
         "alwaysStrict": true,
+        "declaration": true,
+        "declarationDir": "out/types",
         "forceConsistentCasingInFileNames": true,
         "lib": [
             "es2017"
