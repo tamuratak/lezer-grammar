@@ -1,12 +1,22 @@
-const fs = require('fs')
-let {parser} = require('../dist/parser')
+import * as fs from 'fs'
+import type * as lezer from 'lezer'
+import {parser} from '../parser'
+
 const filename = process.argv.pop()
-if (!fs.existsSync(filename)) {
+
+if (!filename || !fs.existsSync(filename)) {
     console.error(`${filename} not found.`)
     process.exit(1)
 }
+
 const s = fs.readFileSync(filename, {encoding: 'utf8'})
-function makeTree(node, str) {
+
+type Result = {
+    kind: string,
+    value: Result[] | string
+}
+
+function makeTree(node: lezer.SyntaxNode, str: string) {
     if (node.type.isError) {
         console.log(str.substring(node.from-10, node.to+10))
         console.log('          ^')
@@ -19,7 +29,7 @@ function makeTree(node, str) {
             value: str.substring(node.from, node.to)
         }
     }
-    let ret = []
+    let ret: Result[] = []
     while (child) {
         ret.push(makeTree(child, str))
         child = child.nextSibling
