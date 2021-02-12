@@ -225,7 +225,7 @@ LiteralRegexp {
   esc { $["\\bfnrtu] }
   whitespace { $[ \n\r\t] }
   comment { "//" ![\r\n]* }
-  blockComment { "/*" (![*] | "*" ![/])* "*/" }
+  blockComment { "/*" (![*] | "*"+ ![*/])* "*"* "*/" }
 }
 
 @skip { whitespace | comment | blockComment }
